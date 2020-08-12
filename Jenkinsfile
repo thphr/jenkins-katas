@@ -46,6 +46,7 @@ pipeline {
                 image 'gradle:jdk11'
               }
             }
+          when { branch "master" }
             steps {
               unstash 'code'
               sh 'ci/unit-test-app.sh'
@@ -68,6 +69,12 @@ pipeline {
                 sh 'ci/build-docker.sh'
                 sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
                 sh 'ci/push-docker.sh'
+          }
+        }
+        stage('run component test'){
+          when { not { branch "dev/*" } }
+          steps {
+
           }
         }
       }
