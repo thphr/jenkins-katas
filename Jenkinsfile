@@ -11,7 +11,7 @@ pipeline {
         skipDefaultCheckout(true)
       }
       steps {
-        stash 'code'
+        stash(excludes: '.git', name: 'code')
       }
     }
 
