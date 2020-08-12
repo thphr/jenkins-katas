@@ -6,6 +6,15 @@ pipeline {
 
   }
   stages {
+    stage('clone down') {
+      options {
+        skipDefaultCheckout(true)
+      }
+      steps {
+        stash 'code'
+      }
+    }
+
     stage('Parallel execution') {
       parallel {
         stage('Parallel execution') {
