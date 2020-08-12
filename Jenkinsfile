@@ -75,7 +75,12 @@ pipeline {
           }
         }
         stage('component test'){
-          when { branch "master" || changeRequest() }
+          when { 
+            anyOf {
+              branch "master"
+              changeRequest() 
+              }
+          }
           steps {
                 unstash 'code'
                 sh 'ci/component-test.sh'
