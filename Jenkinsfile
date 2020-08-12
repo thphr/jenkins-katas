@@ -71,10 +71,10 @@ pipeline {
                 sh 'ci/push-docker.sh'
           }
         }
-        stage('run component test'){
+        stage('component test'){
           when { not { branch "dev/*" } }
           steps {
-
+                sh 'ci/component-test.sh'
           }
         }
       }
