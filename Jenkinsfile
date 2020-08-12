@@ -46,7 +46,6 @@ pipeline {
                 image 'gradle:jdk11'
               }
             }
-          when { branch "master" }
             steps {
               unstash 'code'
               sh 'ci/unit-test-app.sh'
@@ -61,9 +60,13 @@ pipeline {
         }
       }
         stage('push docker app'){
+          options {
+            skipDefaultCheckout(true)
+          }
           environment {
             DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
           }
+          when {branch "master"}
           steps {
                 unstash 'code' //unstash the repository code
                 sh 'ci/build-docker.sh'
@@ -72,11 +75,11 @@ pipeline {
           }
         }
         stage('component test'){
-          when { not { branch "dev/*" } }
+          when { branch "master" || changeRequest() }
           steps {
+                unstash 'code'
                 sh 'ci/component-test.sh'
           }
         }
-      }
-      
-  }
+      }  
+}
